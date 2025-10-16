@@ -183,8 +183,6 @@ export default class ChatbotWidget {
     document.body.appendChild(this.container)
   }
 
-  // Remote configuration removed; all settings are supplied via constructor options.
-
   private injectStyles(): void {
     const existing = document.getElementById(STYLE_TAG_ID)
     if (existing) existing.remove()
