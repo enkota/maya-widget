@@ -19,7 +19,6 @@ export interface ChatbotWidgetOptions {
     colors?: WidgetColors;
     hideBranding?: boolean;
     zIndex?: number;
-    fetchRemoteConfig?: boolean;
     buttonVariant?: ButtonVariant;
     buttonImageUrl?: string;
 }
@@ -44,8 +43,6 @@ export default class ChatbotWidget {
     private resolveOptions;
     private bootstrap;
     private createContainer;
-    private getRemoteConfigUrl;
-    private tryFetchRemoteConfig;
     private injectStyles;
     private buildStyleSheet;
     private buildLiveAgentStyles;

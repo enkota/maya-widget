@@ -16,7 +16,6 @@ const DEFAULTS = {
     },
     hideBranding: false,
     zIndex: 2147483000,
-    fetchRemoteConfig: true,
     buttonVariant: 'classic',
     buttonImageUrl: undefined
 };
@@ -79,7 +78,7 @@ export default class ChatbotWidget {
         this.iframe = null;
     }
     resolveOptions(options) {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v;
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u;
         return {
             botIntegrationId: options.botIntegrationId,
             baseUrl: (_a = options.baseUrl) !== null && _a !== void 0 ? _a : DEFAULTS.baseUrl,
@@ -98,14 +97,12 @@ export default class ChatbotWidget {
             },
             hideBranding: (_r = options.hideBranding) !== null && _r !== void 0 ? _r : DEFAULTS.hideBranding,
             zIndex: (_s = options.zIndex) !== null && _s !== void 0 ? _s : DEFAULTS.zIndex,
-            fetchRemoteConfig: (_t = options.fetchRemoteConfig) !== null && _t !== void 0 ? _t : DEFAULTS.fetchRemoteConfig,
-            buttonVariant: (_u = options.buttonVariant) !== null && _u !== void 0 ? _u : DEFAULTS.buttonVariant,
-            buttonImageUrl: (_v = options.buttonImageUrl) !== null && _v !== void 0 ? _v : DEFAULTS.buttonImageUrl
+            buttonVariant: (_t = options.buttonVariant) !== null && _t !== void 0 ? _t : DEFAULTS.buttonVariant,
+            buttonImageUrl: (_u = options.buttonImageUrl) !== null && _u !== void 0 ? _u : DEFAULTS.buttonImageUrl
         };
     }
     async bootstrap() {
         this.createContainer();
-        await this.tryFetchRemoteConfig();
         this.injectStyles();
         this.createChatWindow();
         this.createButton();
@@ -122,53 +119,7 @@ export default class ChatbotWidget {
         this.container.style.pointerEvents = 'auto';
         document.body.appendChild(this.container);
     }
-    getRemoteConfigUrl() {
-        const { baseUrl, botIntegrationId } = this.config;
-        const trimmedBase = baseUrl.replace(/\/$/, '');
-        return `${trimmedBase}/api/website-widget/configuration/${encodeURIComponent(botIntegrationId)}`;
-    }
-    async tryFetchRemoteConfig() {
-        var _a, _b, _c, _d, _e;
-        if (!this.config.fetchRemoteConfig)
-            return;
-        try {
-            const response = await fetch(this.getRemoteConfigUrl(), {
-                headers: { Accept: 'application/json' }
-            });
-            if (!response.ok)
-                return;
-            const payload = await response.json();
-            const remote = payload === null || payload === void 0 ? void 0 : payload.data;
-            if (!remote)
-                return;
-            if (typeof remote.hideBranding === 'boolean') {
-                this.config.hideBranding = remote.hideBranding;
-            }
-            if (remote.buttonType) {
-                this.buttonVariant = remote.buttonType;
-                this.config.buttonVariant = remote.buttonType;
-            }
-            if (remote.buttonImageUrl) {
-                this.config.buttonImageUrl = remote.buttonImageUrl;
-            }
-            if (remote.colors) {
-                this.config.colors = {
-                    primary: (_a = remote.colors.primary) !== null && _a !== void 0 ? _a : this.config.colors.primary,
-                    iconFill: (_b = remote.colors.iconFill) !== null && _b !== void 0 ? _b : this.config.colors.iconFill,
-                    background: (_c = remote.colors.background) !== null && _c !== void 0 ? _c : this.config.colors.background
-                };
-            }
-            if (remote.size) {
-                this.config.size = {
-                    width: (_d = remote.size.width) !== null && _d !== void 0 ? _d : this.config.size.width,
-                    height: (_e = remote.size.height) !== null && _e !== void 0 ? _e : this.config.size.height
-                };
-            }
-        }
-        catch (error) {
-            console.warn('[Maya Widget] Failed to fetch remote configuration', error);
-        }
-    }
+    // Remote configuration removed; all settings are supplied via constructor options.
     injectStyles() {
         const existing = document.getElementById(STYLE_TAG_ID);
         if (existing)

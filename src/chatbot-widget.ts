@@ -22,7 +22,6 @@ export interface ChatbotWidgetOptions {
   colors?: WidgetColors
   hideBranding?: boolean
   zIndex?: number
-  fetchRemoteConfig?: boolean
   buttonVariant?: ButtonVariant
   buttonImageUrl?: string
 }
@@ -35,7 +34,6 @@ interface ResolvedWidgetOptions {
   colors: Required<WidgetColors>
   hideBranding: boolean
   zIndex: number
-  fetchRemoteConfig: boolean
   buttonVariant: ButtonVariant
   buttonImageUrl?: string
 }
@@ -68,7 +66,6 @@ const DEFAULTS: ResolvedWidgetOptions = {
   },
   hideBranding: false,
   zIndex: 2147483000,
-  fetchRemoteConfig: true,
   buttonVariant: 'classic',
   buttonImageUrl: undefined
 }
@@ -161,7 +158,6 @@ export default class ChatbotWidget {
       },
       hideBranding: options.hideBranding ?? DEFAULTS.hideBranding,
       zIndex: options.zIndex ?? DEFAULTS.zIndex,
-      fetchRemoteConfig: options.fetchRemoteConfig ?? DEFAULTS.fetchRemoteConfig,
       buttonVariant: options.buttonVariant ?? DEFAULTS.buttonVariant,
       buttonImageUrl: options.buttonImageUrl ?? DEFAULTS.buttonImageUrl
     }
@@ -169,7 +165,6 @@ export default class ChatbotWidget {
 
   private async bootstrap(): Promise<void> {
     this.createContainer()
-    await this.tryFetchRemoteConfig()
     this.injectStyles()
     this.createChatWindow()
     this.createButton()
@@ -188,49 +183,7 @@ export default class ChatbotWidget {
     document.body.appendChild(this.container)
   }
 
-  private getRemoteConfigUrl(): string {
-    const { baseUrl, botIntegrationId } = this.config
-    const trimmedBase = baseUrl.replace(/\/$/, '')
-    return `${trimmedBase}/api/website-widget/configuration/${encodeURIComponent(botIntegrationId)}`
-  }
-
-  private async tryFetchRemoteConfig(): Promise<void> {
-    if (!this.config.fetchRemoteConfig) return
-    try {
-      const response = await fetch(this.getRemoteConfigUrl(), {
-        headers: { Accept: 'application/json' }
-      })
-      if (!response.ok) return
-      const payload: { data?: RemoteWidgetConfig } = await response.json()
-      const remote = payload?.data
-      if (!remote) return
-      if (typeof remote.hideBranding === 'boolean') {
-        this.config.hideBranding = remote.hideBranding
-      }
-      if (remote.buttonType) {
-        this.buttonVariant = remote.buttonType
-        this.config.buttonVariant = remote.buttonType
-      }
-      if (remote.buttonImageUrl) {
-        this.config.buttonImageUrl = remote.buttonImageUrl
-      }
-      if (remote.colors) {
-        this.config.colors = {
-          primary: remote.colors.primary ?? this.config.colors.primary,
-          iconFill: remote.colors.iconFill ?? this.config.colors.iconFill,
-          background: remote.colors.background ?? this.config.colors.background
-        }
-      }
-      if (remote.size) {
-        this.config.size = {
-          width: remote.size.width ?? this.config.size.width,
-          height: remote.size.height ?? this.config.size.height
-        }
-      }
-    } catch (error) {
-      console.warn('[Maya Widget] Failed to fetch remote configuration', error)
-    }
-  }
+  // Remote configuration removed; all settings are supplied via constructor options.
 
   private injectStyles(): void {
     const existing = document.getElementById(STYLE_TAG_ID)

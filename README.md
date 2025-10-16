@@ -1,6 +1,6 @@
 # Maya Website Chat Widget
 
-A lightweight TypeScript widget that embeds a live-chat popup in the bottom-right corner of any website. The widget loads a Maya bot conversation from `https://supmaya.com/bots/<botIntegrationId>/chat` and can be configured on the fly or via a remote configuration endpoint.
+A lightweight TypeScript widget that embeds a live-chat popup in the bottom-right corner of any website. The widget loads a Maya bot conversation from `https://supmaya.com/bots/<botIntegrationId>/chat` and is configured entirely via the script options.
 
 ## Quick start
 
@@ -49,32 +49,10 @@ The widget automatically injects the chat iframe and floating launcher button. C
 | `colors.background` | `string` | `#ffffff` | Chat window background color. |
 | `hideBranding` | `boolean` | `false` | Hide "Powered by Maya" footer when `true`. |
 | `zIndex` | `number` | `2147483000` | Override stacking order. |
-| `fetchRemoteConfig` | `boolean` | `true` | Fetch remote widget settings before rendering. |
 | `buttonVariant` | `'classic' \| 'live_agent'` | `'classic'` | Choose between the default icon button or a photo-based live agent style. |
 | `buttonImageUrl` | `string` | `undefined` | Override image when using `live_agent` variant. |
 
-### Remote configuration payload
-
-When `fetchRemoteConfig` is `true`, the widget requests `${baseUrl}/api/website-widget/configuration/<botIntegrationId>`. The endpoint should respond with JSON shaped as:
-
-```json
-{
-  "data": {
-    "hideBranding": false,
-    "buttonType": "classic",
-    "buttonImageUrl": "https://cdn.example.com/live_agent.png",
-    "colors": {
-      "primary": "#262626"
-    },
-    "size": {
-      "width": "72px",
-      "height": "72px"
-    }
-  }
-}
-```
-
-Any supplied fields are merged into the local configuration before the widget renders.
+Remote configuration has been removed; supply all options directly when creating the widget instance.
 
 ## Development
 
