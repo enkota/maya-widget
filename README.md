@@ -50,13 +50,12 @@ The widget automatically injects the chat iframe and floating launcher button. C
 | `hideBranding` | `boolean` | `false` | Hide "Powered by Maya" footer when `true`. |
 | `zIndex` | `number` | `2147483000` | Override stacking order. |
 | `fetchRemoteConfig` | `boolean` | `true` | Fetch remote widget settings before rendering. |
-| `configurationEndpoint` | `string` | `/api/website-widget/configuration` | Endpoint appended to `baseUrl`. Accepts `{botIntegrationId}` placeholder. |
 | `buttonVariant` | `'classic' \| 'live_agent'` | `'classic'` | Choose between the default icon button or a photo-based live agent style. |
 | `buttonImageUrl` | `string` | `undefined` | Override image when using `live_agent` variant. |
 
 ### Remote configuration payload
 
-When `fetchRemoteConfig` is `true`, the widget requests `${baseUrl}${configurationEndpoint}`. The endpoint should respond with JSON shaped as:
+When `fetchRemoteConfig` is `true`, the widget requests `${baseUrl}/api/website-widget/configuration/<botIntegrationId>`. The endpoint should respond with JSON shaped as:
 
 ```json
 {

@@ -1,6 +1,6 @@
 const DEFAULTS = {
     botIntegrationId: '',
-    baseUrl: 'https://maya.test',
+    baseUrl: 'https://supmaya.com',
     position: {
         bottom: '20px',
         right: '20px'
@@ -17,7 +17,6 @@ const DEFAULTS = {
     hideBranding: false,
     zIndex: 2147483000,
     fetchRemoteConfig: true,
-    configurationEndpoint: '/api/website-widget/configuration',
     buttonVariant: 'classic',
     buttonImageUrl: undefined
 };
@@ -80,7 +79,7 @@ export default class ChatbotWidget {
         this.iframe = null;
     }
     resolveOptions(options) {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w;
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v;
         return {
             botIntegrationId: options.botIntegrationId,
             baseUrl: (_a = options.baseUrl) !== null && _a !== void 0 ? _a : DEFAULTS.baseUrl,
@@ -100,9 +99,8 @@ export default class ChatbotWidget {
             hideBranding: (_r = options.hideBranding) !== null && _r !== void 0 ? _r : DEFAULTS.hideBranding,
             zIndex: (_s = options.zIndex) !== null && _s !== void 0 ? _s : DEFAULTS.zIndex,
             fetchRemoteConfig: (_t = options.fetchRemoteConfig) !== null && _t !== void 0 ? _t : DEFAULTS.fetchRemoteConfig,
-            configurationEndpoint: (_u = options.configurationEndpoint) !== null && _u !== void 0 ? _u : DEFAULTS.configurationEndpoint,
-            buttonVariant: (_v = options.buttonVariant) !== null && _v !== void 0 ? _v : DEFAULTS.buttonVariant,
-            buttonImageUrl: (_w = options.buttonImageUrl) !== null && _w !== void 0 ? _w : DEFAULTS.buttonImageUrl
+            buttonVariant: (_u = options.buttonVariant) !== null && _u !== void 0 ? _u : DEFAULTS.buttonVariant,
+            buttonImageUrl: (_v = options.buttonImageUrl) !== null && _v !== void 0 ? _v : DEFAULTS.buttonImageUrl
         };
     }
     async bootstrap() {
@@ -125,13 +123,9 @@ export default class ChatbotWidget {
         document.body.appendChild(this.container);
     }
     getRemoteConfigUrl() {
-        const { baseUrl, configurationEndpoint, botIntegrationId } = this.config;
-        const endpoint = configurationEndpoint.replace(/\/$/, '');
-        if (endpoint.includes('{botIntegrationId}')) {
-            return `${baseUrl}${endpoint.replace('{botIntegrationId}', encodeURIComponent(botIntegrationId))}`;
-        }
-        const separator = endpoint.startsWith('/') ? '' : '/';
-        return `${baseUrl}${separator}${endpoint}/${encodeURIComponent(botIntegrationId)}`;
+        const { baseUrl, botIntegrationId } = this.config;
+        const trimmedBase = baseUrl.replace(/\/$/, '');
+        return `${trimmedBase}/api/website-widget/configuration/${encodeURIComponent(botIntegrationId)}`;
     }
     async tryFetchRemoteConfig() {
         var _a, _b, _c, _d, _e;
@@ -365,7 +359,7 @@ export default class ChatbotWidget {
             const footer = document.createElement('div');
             footer.className = 'maya-chatbot-footer';
             const referrer = encodeURIComponent(window.location.hostname);
-            footer.innerHTML = `Powered by <a href="https://maya.test?ref=${referrer}" target="_blank" rel="noopener">Maya</a>`;
+            footer.innerHTML = `Powered by <a href="https://supmaya.com?ref=${referrer}" target="_blank" rel="noopener">Maya</a>`;
             this.chatWindow.appendChild(footer);
         }
         this.container.appendChild(this.chatWindow);

@@ -23,7 +23,6 @@ export interface ChatbotWidgetOptions {
   hideBranding?: boolean
   zIndex?: number
   fetchRemoteConfig?: boolean
-  configurationEndpoint?: string
   buttonVariant?: ButtonVariant
   buttonImageUrl?: string
 }
@@ -37,7 +36,6 @@ interface ResolvedWidgetOptions {
   hideBranding: boolean
   zIndex: number
   fetchRemoteConfig: boolean
-  configurationEndpoint: string
   buttonVariant: ButtonVariant
   buttonImageUrl?: string
 }
@@ -54,7 +52,7 @@ type ButtonVariant = 'classic' | 'live_agent'
 
 const DEFAULTS: ResolvedWidgetOptions = {
   botIntegrationId: '',
-  baseUrl: 'https://maya.test',
+  baseUrl: 'https://supmaya.com',
   position: {
     bottom: '20px',
     right: '20px'
@@ -71,7 +69,6 @@ const DEFAULTS: ResolvedWidgetOptions = {
   hideBranding: false,
   zIndex: 2147483000,
   fetchRemoteConfig: true,
-  configurationEndpoint: '/api/website-widget/configuration',
   buttonVariant: 'classic',
   buttonImageUrl: undefined
 }
@@ -165,7 +162,6 @@ export default class ChatbotWidget {
       hideBranding: options.hideBranding ?? DEFAULTS.hideBranding,
       zIndex: options.zIndex ?? DEFAULTS.zIndex,
       fetchRemoteConfig: options.fetchRemoteConfig ?? DEFAULTS.fetchRemoteConfig,
-      configurationEndpoint: options.configurationEndpoint ?? DEFAULTS.configurationEndpoint,
       buttonVariant: options.buttonVariant ?? DEFAULTS.buttonVariant,
       buttonImageUrl: options.buttonImageUrl ?? DEFAULTS.buttonImageUrl
     }
@@ -193,13 +189,9 @@ export default class ChatbotWidget {
   }
 
   private getRemoteConfigUrl(): string {
-    const { baseUrl, configurationEndpoint, botIntegrationId } = this.config
-    const endpoint = configurationEndpoint.replace(/\/$/, '')
-    if (endpoint.includes('{botIntegrationId}')) {
-      return `${baseUrl}${endpoint.replace('{botIntegrationId}', encodeURIComponent(botIntegrationId))}`
-    }
-    const separator = endpoint.startsWith('/') ? '' : '/'
-    return `${baseUrl}${separator}${endpoint}/${encodeURIComponent(botIntegrationId)}`
+    const { baseUrl, botIntegrationId } = this.config
+    const trimmedBase = baseUrl.replace(/\/$/, '')
+    return `${trimmedBase}/api/website-widget/configuration/${encodeURIComponent(botIntegrationId)}`
   }
 
   private async tryFetchRemoteConfig(): Promise<void> {
@@ -439,7 +431,7 @@ export default class ChatbotWidget {
       const footer = document.createElement('div')
       footer.className = 'maya-chatbot-footer'
       const referrer = encodeURIComponent(window.location.hostname)
-      footer.innerHTML = `Powered by <a href="https://maya.test?ref=${referrer}" target="_blank" rel="noopener">Maya</a>`
+      footer.innerHTML = `Powered by <a href="https://supmaya.com?ref=${referrer}" target="_blank" rel="noopener">Maya</a>`
       this.chatWindow.appendChild(footer)
     }
 

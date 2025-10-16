@@ -20,7 +20,6 @@ export interface ChatbotWidgetOptions {
     hideBranding?: boolean;
     zIndex?: number;
     fetchRemoteConfig?: boolean;
-    configurationEndpoint?: string;
     buttonVariant?: ButtonVariant;
     buttonImageUrl?: string;
 }
