@@ -1,0 +1,31 @@
+{
+  "name": "maya-widget",
+  "version": "0.1.0",
+  "description": "Embeddable Maya live chat widget.",
+  "type": "module",
+  "main": "dist/chatbot-widget.js",
+  "types": "dist/chatbot-widget.d.ts",
+  "exports": {
+    ".": "./dist/chatbot-widget.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "dev": "tsc --watch --project tsconfig.json",
+    "lint": "tsc --noEmit --pretty",
+    "preview": "http-server -c-1 -p 5173 ."
+  },
+  "keywords": [
+    "chatbot",
+    "widget",
+    "maya"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "typescript": "^5.9.3"
+  }
+}

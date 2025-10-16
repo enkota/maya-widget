@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+  <body>
+    <div class="demo p-8">
+      <h1 class="text-2xl font-medium mb-4">Maya Chat Widget</h1>
+      <p>This page mounts the widget from <code>./dist/chatbot-widget.js</code>. You can override defaults with URL params: <code>?bot=1207&baseUrl=https://maya.test</code></p>
+      <div class="flex items-center gap-2 mt-6">
+        <button class="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 transition-all duration-300 cursor-pointer" id="openBtn">Open chat</button>
+        <button class="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 transition-all duration-300 cursor-pointer" id="closeBtn">Close chat</button>
+        <button class="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 transition-all duration-300 cursor-pointer" id="toggleBtn">Toggle chat</button>
+      </div>
+    </div>
+
+    <script type="module">
+      import ChatbotWidget from './dist/chatbot-widget.js'
+
+      const params = new URLSearchParams(location.search)
+      const bot = params.get('bot') ?? '1'
+      const baseUrl = params.get('baseUrl') ?? 'https://maya.test'
+
+      const widget = new ChatbotWidget({
+        botIntegrationId: bot,
+        baseUrl,
+        colors: { primary: '#000000', iconFill: '#ffffff' }
+        // You can try the other style:
+        // buttonVariant: 'live_agent',
+        // buttonImageUrl: 'https://example.com/path/to/agent.png'
+      })
+
+      // Simple controls for manual testing
+      document.getElementById('openBtn')?.addEventListener('click', () => widget.open())
+      document.getElementById('closeBtn')?.addEventListener('click', () => widget.close())
+      document.getElementById('toggleBtn')?.addEventListener('click', () => widget.toggle())
+
+      // Expose globally for quick console access
+      window.mayaWidget = widget
+    </script>
+  </body>
+</html>
