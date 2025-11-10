@@ -133,6 +133,10 @@ export default class ChatbotWidget {
         const windowSelector = '#maya-chatbot-widget .maya-chatbot-window';
         const closeSelector = '#maya-chatbot-widget .maya-chatbot-close';
         const baseStyles = `
+      /* System UI font applied to all widget elements (iframe has its own document) */
+      #maya-chatbot-widget, #maya-chatbot-widget * {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+      }
       ${buttonSelector} {
         position: fixed;
         bottom: ${position.bottom};
