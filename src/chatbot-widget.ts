@@ -52,8 +52,8 @@ const DEFAULTS: ResolvedWidgetOptions = {
   botIntegrationId: '',
   baseUrl: 'https://supmaya.com',
   position: {
-    bottom: '20px',
-    right: '20px'
+    bottom: '15px',
+    right: '15px'
   },
   size: {
     width: '60px',
@@ -206,7 +206,6 @@ export default class ChatbotWidget {
       ${buttonSelector} {
         position: fixed;
         bottom: ${position.bottom};
-        bottom: 10px;
         right: ${position.right};
         width: ${size.width};
         height: ${size.height};
