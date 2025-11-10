@@ -169,7 +169,7 @@ export default class ChatbotWidget {
 
       ${windowSelector} {
         position: fixed;
-        bottom: calc(${position.bottom} + ${size.height} + 30px);
+        bottom: calc(${position.bottom} + ${size.height} + 20px);
         right: ${position.right};
         width: min(420px, calc(100vw - 24px));
         height: min(70vh, 640px);
