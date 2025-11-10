@@ -76,7 +76,6 @@ export default class ChatbotWidget {
   private readonly config: ResolvedWidgetOptions
   private container: HTMLDivElement | null = null
   private chatWindow: HTMLDivElement | null = null
-  private chatHeader: HTMLDivElement | null = null
   private closeBtn: HTMLButtonElement | null = null
   private chatButton: HTMLButtonElement | null = null
   private iframe: HTMLIFrameElement | null = null
@@ -197,7 +196,6 @@ export default class ChatbotWidget {
     const { colors, size, position, zIndex } = this.config
     const buttonSelector = '#maya-chatbot-widget .maya-chatbot-button'
     const windowSelector = '#maya-chatbot-widget .maya-chatbot-window'
-    const headerSelector = '#maya-chatbot-widget .maya-chatbot-header'
     const closeSelector = '#maya-chatbot-widget .maya-chatbot-close'
 
     const baseStyles = `
@@ -268,27 +266,24 @@ export default class ChatbotWidget {
         height: calc(100% - 48px);
         border: 0;
         flex: 1;
-      }
-      ${headerSelector} {
-        height: 48px;
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        padding: 0 8px;
-        border-bottom: 1px solid rgba(0,0,0,.06);
-        background: ${colors.background};
+        position: relative;
+        z-index: 0;
       }
       ${closeSelector} {
+        position: absolute;
+        top: 8px;
+        right: 8px;
         width: 36px;
         height: 36px;
         border-radius: 8px;
         border: 1px solid rgba(0,0,0,.12);
         background: #ffffff;
         color: #111827;
-        display: inline-flex;
+        display: none;
         align-items: center;
         justify-content: center;
         cursor: pointer;
+        z-index: 1;
       }
       ${closeSelector}:hover { filter: brightness(0.98); }
       ${windowSelector} .maya-chatbot-footer {
@@ -319,6 +314,10 @@ export default class ChatbotWidget {
           border-radius: 12px;
         }
         ${windowSelector} iframe { height: calc(100% - 48px); }
+        /* Show the in-window close button on mobile */
+        ${closeSelector} { display: inline-flex; }
+        /* Hide the floating toggle button while the window is open to prevent overlap */
+        ${windowSelector}.open + .maya-chatbot-button { display: none; }
       }
     `
 
@@ -355,9 +354,7 @@ export default class ChatbotWidget {
 
     this.ensureViewportMetaTag()
 
-    // Header with close button for reliable closing on mobile
-    this.chatHeader = document.createElement('div')
-    this.chatHeader.className = 'maya-chatbot-header'
+    // Close button inside the window (for mobile placement top-right)
     this.closeBtn = document.createElement('button')
     this.closeBtn.type = 'button'
     this.closeBtn.className = 'maya-chatbot-close'
@@ -368,14 +365,12 @@ export default class ChatbotWidget {
       </svg>
     `
     this.closeBtn.addEventListener('click', () => this.close())
-    this.chatHeader.appendChild(this.closeBtn)
+    this.chatWindow.appendChild(this.closeBtn)
 
     this.iframe = document.createElement('iframe')
     this.iframe.className = 'maya-chatbot-iframe'
     this.iframe.src = this.resolveChatUrl()
-    this.iframe.allow = 'microphone; camera'
     this.iframe.title = 'Maya chat'
-    this.chatWindow.appendChild(this.chatHeader)
     this.chatWindow.appendChild(this.iframe)
 
     if (!this.config.hideBranding) {

@@ -27,7 +27,6 @@ export default class ChatbotWidget {
     private readonly config;
     private container;
     private chatWindow;
-    private chatHeader;
     private closeBtn;
     private chatButton;
     private iframe;
